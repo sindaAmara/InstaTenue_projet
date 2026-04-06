@@ -30,6 +30,32 @@ export default function HomePage() {
   const hasFilter = activeSeason || activeStyle
 
   return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Mes Tenues</Text>
+
+      {outfits.map((season, sIdx) => (
+        <View key={sIdx}>
+          <Text style={styles.season}>{season.season}</Text>
+
+          {season.themes.map((theme, tIdx) => (
+            <View key={tIdx}>
+              <Text style={styles.theme}>{theme.name}</Text>
+
+              <View style={styles.grid}>
+                {theme.items.map((img, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() =>
+                      router.push(
+                        `/outfitDetail?season=${season.season}&theme=${theme.name}&outfitIndex=${i}`
+                      )
+                    }
+                  >
+                    <Image source={img} style={styles.image} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
       {/* HEADER */}
