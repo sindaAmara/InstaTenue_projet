@@ -1,9 +1,17 @@
 // data/fakeData.ts
 
+type Article = {
+  label: string  
+  name: string
+  price: string
+  image: ReturnType<typeof require>
+}
+
 type Theme = {
   name: string
   items: ReturnType<typeof require>[]
-  details?: ReturnType<typeof require>[][] // détails des éléments pour chaque tenue
+  details?: ReturnType<typeof require>[][]
+  articles?: Article[][] 
 }
 
 type Season = {
@@ -29,9 +37,20 @@ export const outfits: Season[] = [
             require("../assets/img/printemps/chic/chaussure_marron.jpeg"),
             require("../assets/img/printemps/chic/sac_noir.jpeg"),
           ],
-          [], // tenue_2 pas encore définie
-          [], // tenue_3 pas encore définie
+          [], 
+          [], 
         ],
+        articles: [
+        [
+          { label: 'Haut',      name: 'Chemise rayée',   price: '39 €', image: require('../assets/img/printemps/chic/chemise_marron_rayure.jpeg') },
+          { label: 'Bas',       name: 'Pantalon marron', price: '59 €', image: require('../assets/img/printemps/chic/pantalon_marron.jpeg') },
+          { label: 'Chaussures',name: 'Mocassins',        price: '89 €', image: require('../assets/img/printemps/chic/chaussure_marron.jpeg') },
+          { label: 'Sac',       name: 'Sac structuré',   price: '120 €',image: require('../assets/img/printemps/chic/sac_noir.jpeg') },
+          { label: 'Accessoire',name: 'Ceinture dorée',  price: '25 €', image: require('../assets/img/printemps/chic/chemise_marron_rayure.jpeg') },
+        ],
+        [], 
+        [],
+],
       },
       {
         name: "Sport",
