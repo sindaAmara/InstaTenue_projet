@@ -1,6 +1,9 @@
+// data/fakeData.ts
+
 type Theme = {
   name: string
   items: ReturnType<typeof require>[]
+  details?: ReturnType<typeof require>[][] // détails des éléments pour chaque tenue
 }
 
 type Season = {
@@ -19,6 +22,16 @@ export const outfits: Season[] = [
           require("../assets/img/printemps/chic/tenue_2.jpeg"),
           require("../assets/img/printemps/chic/tenue_3.jpeg"),
         ],
+        details: [
+          [
+            require("../assets/img/printemps/chic/pantalon_marron.jpeg"),
+            require("../assets/img/printemps/chic/chemise_marron_rayure.jpeg"),
+            require("../assets/img/printemps/chic/chaussure_marron.jpeg"),
+            require("../assets/img/printemps/chic/sac_noir.jpeg"),
+          ],
+          [], // tenue_2 pas encore définie
+          [], // tenue_3 pas encore définie
+        ],
       },
       {
         name: "Sport",
@@ -26,6 +39,9 @@ export const outfits: Season[] = [
           require("../assets/img/printemps/sport/tenue_1.jpeg"),
           require("../assets/img/printemps/sport/tenue_2.jpeg"),
           require("../assets/img/printemps/sport/tenue_3.jpeg"),
+        ],
+        details: [
+          [], [], []
         ],
       },
     ],
