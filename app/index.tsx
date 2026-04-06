@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'expo-router'
+
 import {
   View, Text, TouchableOpacity, StyleSheet,
-  Dimensions, Animated, Easing,
+  Dimensions, Animated, Easing,Image
 } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
@@ -51,9 +52,10 @@ export default function SplashPage() {
       <View style={[styles.petal, styles.petal3]} />
       <View style={[styles.petal, styles.petal4]} />
 
-      <Animated.View style={[styles.monogram, { opacity: fadeTitle }]}>
-        <Text style={styles.monogramText}>I</Text>
-      </Animated.View>
+      <Animated.Image
+        source={require('../assets/img/logo1.png')} // Chemin vers ton logo
+        style={[styles.monogram, { opacity: fadeTitle, resizeMode: 'contain' }]}
+      />
 
       <Animated.Text style={[styles.tagline, { opacity: fadeTitle }]}>
         VOTRE GARDE-ROBE
@@ -74,7 +76,7 @@ export default function SplashPage() {
       </Animated.View>
 
       <Animated.Text style={[styles.welcomeText, { opacity: fadeText, transform: [{ translateY }] }]}>
-        {'Bienvenue 🌸\nDécouvrez des tenues pensées\npour vous, selon votre style.'}
+        {'Bienvenue \nDécouvrez des tenues pensées\npour vous, selon votre style.'}
       </Animated.Text>
 
       <Animated.View style={{ opacity: fadeBtn }}>
@@ -94,13 +96,13 @@ export default function SplashPage() {
 }
 
 const ROSE  = '#c87090'
-const DARK  = '#3d1a2e'
+const DARK  = '#622b4a'
 const CREAM = '#fdf0f5'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fce8ee',
+    backgroundColor: '#fdf0f5',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 32,
@@ -116,9 +118,10 @@ const styles = StyleSheet.create({
   petal4: { width: 100, height: 100, backgroundColor: '#c87090', bottom: 100, left: -30, transform: [{ rotate: '-15deg' }] },
 
   monogram: {
-    width: 64, height: 64, borderRadius: 32,
-    borderWidth: 1.5, borderColor: ROSE,
-    alignItems: 'center', justifyContent: 'center',
+    width: 64,
+    height: 64,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
   },
   monogramText: {
