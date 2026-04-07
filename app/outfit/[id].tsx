@@ -1,11 +1,17 @@
-import { useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useState } from 'react'
 import {
-  View, Text, Image, ScrollView, TouchableOpacity,
-  StyleSheet, Dimensions, Pressable,
+  Dimensions,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native'
-import { useWardrobe }  from '../../contexts/WardrobeContext'
-import SimilarOutfits   from '../../components/outfit/SimilarOutfits'
+import SimilarOutfits from '../../components/outfit/SimilarOutfits'
+import { useWardrobe } from '../../contexts/WardrobeContext'
 
 const { width } = Dimensions.get('window')
 const PHOTO_H = width * 1.25
@@ -37,8 +43,12 @@ export default function OutfitDetail() {
 
       {/* HEADER */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.back}>← Retour</Text>
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={() => router.back()} 
+          activeOpacity={0.8}
+        >
+          <Text style={styles.backButtonText}>Retour ↩︎</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{theme}</Text>
         <Text style={styles.headerSeason}>{season}</Text>
@@ -75,8 +85,15 @@ export default function OutfitDetail() {
                     <Text style={styles.popupLabel}>{article.label.toUpperCase()}</Text>
                     <Text style={styles.popupName}>{article.name}</Text>
                     <Text style={styles.popupPrice}>{article.price}</Text>
+                    
+                    {/* Ajout de la marque et de la réf */}
+                    {(article.brand || article.ref) && (
+                      <View style={{ marginTop: 4, borderTopWidth: 0.5, borderTopColor: '#fce8ee', paddingTop: 4 }}>
+                        {article.brand && <Text style={styles.popupBrand}>{article.brand}</Text>}
+                        {article.ref && <Text style={styles.popupRef}>Réf. {article.ref}</Text>}
+                      </View>
+                    )}
                   </View>
-                  <View style={styles.popupLine} />
                 </View>
               )}
 
@@ -114,12 +131,28 @@ export default function OutfitDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: CREAM },
 
-  header: { paddingTop: 56, paddingHorizontal: 24, paddingBottom: 16 },
-  back: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 13, letterSpacing: 2, color: MID,
-    textTransform: 'uppercase', marginBottom: 10,
+  header: { 
+    paddingTop: 45,
+    paddingHorizontal: 24, 
+    paddingBottom: 16 
   },
+
+  backButton: { 
+    backgroundColor: '#a06080', 
+    paddingVertical: 4,     
+    paddingHorizontal: 14,  
+    borderRadius: 50, 
+    marginBottom: 12,       
+    alignSelf: 'flex-start' 
+  },
+  backButtonText: { 
+    fontFamily: 'CormorantGaramond_400Regular', 
+    fontSize: 11,           
+    letterSpacing: 1.5, 
+    color: '#fdf0f5', 
+    textTransform: 'uppercase' 
+  },
+
   headerTitle: {
     fontFamily: 'PlayfairDisplay_400Regular_Italic',
     fontSize: 32, color: DARK, lineHeight: 38,
@@ -163,16 +196,19 @@ const styles = StyleSheet.create({
     position: 'absolute', right: 22,
   },
   popupLine: { width: 40, height: 1.5, backgroundColor: ROSE },
-  popupCard: {
+popupCard: {
     backgroundColor: 'white', borderRadius: 14,
     borderWidth: 0.5, borderColor: '#e8c4d0',
-    padding: 10, width: 118,
+    padding: 10, width: 130, 
     shadowColor: DARK, shadowOpacity: 0.12, shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 }, elevation: 5,
   },
-  popupImg: {
-    width: 98, height: 76, borderRadius: 10,
-    marginBottom: 7, backgroundColor: '#fce8ee',
+popupImg: {
+    width: 110,     
+    height: 150,    
+    borderRadius: 10,
+    marginBottom: 7,
+    backgroundColor: '#fce8ee',
   },
   popupLabel: {
     fontFamily: 'CormorantGaramond_300Light',
@@ -184,6 +220,16 @@ const styles = StyleSheet.create({
   },
   popupPrice: {
     fontFamily: 'CormorantGaramond_300Light', fontSize: 12, color: ROSE, marginTop: 3,
+  },
+  popupBrand: {
+    fontFamily: 'CormorantGaramond_400Regular',
+    fontSize: 10, color: MID,
+    textTransform: 'uppercase',
+  },
+  popupRef: {
+    fontFamily: 'CormorantGaramond_300Light',
+    fontSize: 9, color: '#c4a0b0',
+    marginTop: 1,
   },
 
   infoBlock: { paddingHorizontal: 24, paddingTop: 22, paddingBottom: 8 },

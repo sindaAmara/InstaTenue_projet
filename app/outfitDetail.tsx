@@ -28,14 +28,19 @@ export default function OutfitDetail() {
 
   const [activePoint, setActivePoint] = useState<number | null>(null)
 
-  const seasonData = outfits.find(s => s.season === season)
-  const themeData  = seasonData?.themes.find(t => t.name === theme)
-  const mainImage  = themeData?.items[idx]
-  const articles   = themeData?.articles?.[idx] ?? []
+  const seasonData = outfits.find(s => s.season.toLowerCase() === season?.toLowerCase())
+  const themeData  = seasonData?.themes.find(t => t.name.toLowerCase() === theme?.toLowerCase())
+
+  if (!seasonData || !themeData) {
+    return <Text>Tenue non trouvée</Text>
+  }
+
+  const mainImage  = themeData.items[idx]
+  const articles   = themeData.articles?.[idx] ?? []
 
   const similarItems = themeData?.items.filter((_, i) => i !== idx) ?? []
 
-  const DOT_POSITIONS = [0.12, 0.28, 0.46, 0.64, 0.80]
+  const DOT_POSITIONS = articles.map((_, i) => (i + 1) / (articles.length + 1))
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -56,39 +61,31 @@ export default function OutfitDetail() {
         <Image source={mainImage} style={styles.photo} resizeMode="cover" />
 
         {/* 5 points verticaux */}
-        {DOT_POSITIONS.map((yRatio, i) => {
-          const article   = articles[i]
-          const isActive  = activePoint === i
-          const hasArticle = !!article
+        {articles.map((article, i) => {
+          const isActive = activePoint === i
 
           return (
-            <View
-              key={i}
-              style={[styles.dotRow, { top: PHOTO_H * yRatio - 6 }]}
-              pointerEvents="box-none"
-            >
-              {/* Popup à gauche du point si actif */}
-              {isActive && article && (
-                <View style={styles.popupRow} pointerEvents="none">
+            <View key={i} style={[styles.dotRow, { top: PHOTO_H * DOT_POSITIONS[i] - 6 }]} pointerEvents="box-none">
+              {isActive && (
+                <View style={styles.popupRow}>
                   <View style={styles.popupCard}>
                     <Image source={article.image} style={styles.popupImg} resizeMode="cover" />
                     <Text style={styles.popupLabel}>{article.label.toUpperCase()}</Text>
                     <Text style={styles.popupName}>{article.name}</Text>
                     <Text style={styles.popupPrice}>{article.price}</Text>
-                    {article.brand && <Text style={styles.popupBrand}>{article.brand}</Text>}
-                    {article.ref && <Text style={styles.popupRef}>Réf. {article.ref}</Text>}
+                    {(article.brand || article.ref) && (
+                      <View style={{ marginTop: 4, borderTopWidth: 0.5, borderTopColor: '#fce8ee', paddingTop: 4 }}>
+                        {article.brand && <Text style={styles.popupBrand}>{article.brand}</Text>}
+                        {article.ref && <Text style={styles.popupRef}>{article.ref}</Text>}
+                      </View>
+                    )}
                   </View>
                   <View style={styles.popupLine} />
                 </View>
               )}
 
-              {/* Point */}
               <TouchableOpacity
-                style={[
-                  styles.dot,
-                  isActive  && styles.dotActive,
-                  !hasArticle && styles.dotEmpty,
-                ]}
+                style={[styles.dot, isActive && styles.dotActive]}
                 onPress={() => setActivePoint(isActive ? null : i)}
                 activeOpacity={0.7}
               />
@@ -120,6 +117,15 @@ export default function OutfitDetail() {
             <View style={styles.similarRow}>
               {similarItems.map((img, i) => {
                 const realIdx = themeData!.items.indexOf(img)
+
+                console.log('seasonData:', seasonData)
+                console.log('themeData:', themeData)
+                console.log('articles:', articles)
+                console.log('idx:', idx)
+                console.log('mainImage:', mainImage)
+                console.log('articles:', articles)
+                articles.forEach((a, i) => console.log(`Article ${i}:`, a))
+
                 return (
                   <TouchableOpacity
                     key={i}
@@ -206,17 +212,18 @@ const styles = StyleSheet.create({
     backgroundColor: ROSE,
   },
   popupCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    borderWidth: 0.5, borderColor: '#e8c4d0',
-    padding: 8,
-    width: 110,
-    shadowColor: DARK,
-    shadowOpacity: 0.10,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
-  },
+      backgroundColor: 'white',
+      borderRadius: 12,
+      borderWidth: 0.5, borderColor: '#e8c4d0',
+      padding: 8,
+      width: 125,
+      shadowColor: DARK,
+      shadowOpacity: 0.10,
+      shadowRadius: 8,
+      shadowOffset: { width: 0, height: 4 },
+      elevation: 4,
+    },
+    
   popupImg: {
     width: 94, height: 70,
     borderRadius: 8, marginBottom: 6,
@@ -263,8 +270,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fce8ee',
   },
 
-  popupBrand: { fontFamily: 'CormorantGaramond_300Light', fontSize: 10, color: '#a06080', marginTop: 2 },
-  popupRef: { fontFamily: 'CormorantGaramond_300Light', fontSize: 9, color: '#c4a0b0', letterSpacing: 1 },
+popupBrand: {
+    fontFamily: 'CormorantGaramond_300Light',
+    fontSize: 10,
+    color: MID,
+    marginTop: 2,
+  },
+  popupRef: {
+    fontFamily: 'CormorantGaramond_300Light',
+    fontSize: 9,
+    color: '#c4a0b0',
+  },
 
   footer: {
     textAlign: 'center', paddingVertical: 36,
