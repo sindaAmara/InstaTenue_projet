@@ -1,9 +1,13 @@
-import { useEffect, useRef } from 'react'
 import { useRouter } from 'expo-router'
+import { useEffect, useRef } from 'react'
 
 import {
-  View, Text, TouchableOpacity, StyleSheet,
-  Dimensions, Animated, Easing,Image
+  Animated,
+  Dimensions,
+  Easing,
+  StyleSheet,
+  Text, TouchableOpacity,
+  View
 } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
@@ -79,7 +83,7 @@ export default function SplashPage() {
         {'Bienvenue \nDécouvrez des tenues pensées\npour vous, selon votre style.'}
       </Animated.Text>
 
-      <Animated.View style={{ opacity: fadeBtn }}>
+      <Animated.View style={{ opacity: fadeBtn, alignItems: 'center' }}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.replace('/home')}
@@ -158,13 +162,22 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: DARK,
-    paddingVertical: 16, paddingHorizontal: 40,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
     borderRadius: 50,
+    alignItems: 'center',      
+    justifyContent: 'center', 
+    flexDirection: 'row',      
   },
+
   buttonText: {
     fontFamily: 'CormorantGaramond_400Regular',
-    fontSize: 14, letterSpacing: 2,
-    color: CREAM, textTransform: 'uppercase',
+    fontSize: 14,
+    letterSpacing: 2,
+    color: CREAM,
+    textTransform: 'uppercase',
+    textAlign: 'center',       
+    includeFontPadding: false, 
   },
   footer: {
     position: 'absolute', bottom: 36,

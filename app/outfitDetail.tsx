@@ -1,8 +1,14 @@
-import { useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useState } from 'react'
 import {
-  View, Text, Image, ScrollView, TouchableOpacity,
-  StyleSheet, Modal, Dimensions, Pressable,
+  Dimensions,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native'
 import { outfits } from '../data/fakeData'
 
@@ -71,6 +77,8 @@ export default function OutfitDetail() {
                     <Text style={styles.popupLabel}>{article.label.toUpperCase()}</Text>
                     <Text style={styles.popupName}>{article.name}</Text>
                     <Text style={styles.popupPrice}>{article.price}</Text>
+                    {article.brand && <Text style={styles.popupBrand}>{article.brand}</Text>}
+                    {article.ref && <Text style={styles.popupRef}>Réf. {article.ref}</Text>}
                   </View>
                   <View style={styles.popupLine} />
                 </View>
@@ -262,6 +270,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#fce8ee',
   },
+
+  popupBrand: { fontFamily: 'CormorantGaramond_300Light', fontSize: 10, color: '#a06080', marginTop: 2 },
+  popupRef: { fontFamily: 'CormorantGaramond_300Light', fontSize: 9, color: '#c4a0b0', letterSpacing: 1 },
 
   /* footer */
   footer: {
