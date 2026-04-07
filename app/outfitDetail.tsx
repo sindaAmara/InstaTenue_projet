@@ -33,10 +33,8 @@ export default function OutfitDetail() {
   const mainImage  = themeData?.items[idx]
   const articles   = themeData?.articles?.[idx] ?? []
 
-  // Tenues similaires = autres tenues de la même catégorie
   const similarItems = themeData?.items.filter((_, i) => i !== idx) ?? []
 
-  // Positions Y des 5 points (% de la hauteur photo)
   const DOT_POSITIONS = [0.12, 0.28, 0.46, 0.64, 0.80]
 
   return (
@@ -148,7 +146,6 @@ export default function OutfitDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: CREAM },
 
-  /* header */
   header: { paddingTop: 56, paddingHorizontal: 24, paddingBottom: 16 },
   back: {
     fontFamily: 'CormorantGaramond_300Light',
@@ -165,7 +162,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase', marginTop: 4,
   },
 
-  /* photo + points */
   photoWrapper: {
     marginHorizontal: 16,
     height: PHOTO_H,
@@ -177,7 +173,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 
-  /* points */
   dotRow: {
     position: 'absolute',
     right: -6,
@@ -200,7 +195,6 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 
-  /* popup */
   popupRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -242,7 +236,6 @@ const styles = StyleSheet.create({
     fontSize: 11, color: ROSE, marginTop: 2,
   },
 
-  /* info */
   infoBlock: { paddingHorizontal: 24, paddingTop: 20, paddingBottom: 8 },
   infoTitle: {
     fontFamily: 'PlayfairDisplay_400Regular_Italic',
@@ -253,7 +246,6 @@ const styles = StyleSheet.create({
     fontSize: 12, letterSpacing: 1.5, color: MID, marginTop: 4,
   },
 
-  /* similaires */
   similarSection: { paddingHorizontal: 24, paddingTop: 24 },
   similarTitle: {
     fontFamily: 'PlayfairDisplay_400Regular_Italic',
@@ -274,7 +266,6 @@ const styles = StyleSheet.create({
   popupBrand: { fontFamily: 'CormorantGaramond_300Light', fontSize: 10, color: '#a06080', marginTop: 2 },
   popupRef: { fontFamily: 'CormorantGaramond_300Light', fontSize: 9, color: '#c4a0b0', letterSpacing: 1 },
 
-  /* footer */
   footer: {
     textAlign: 'center', paddingVertical: 36,
     fontFamily: 'CormorantGaramond_300Light',

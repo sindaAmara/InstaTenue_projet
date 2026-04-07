@@ -23,7 +23,6 @@ type Season = {
 
 export const outfits: Season[] = [
 
-  // 🌸 PRINTEMPS
   {
     season: "Printemps",
     themes: [
@@ -160,7 +159,6 @@ export const outfits: Season[] = [
     ],
   },
 
-  // 🍂 AUTOMNE
   {
     season: "Automne",
     themes: [
@@ -183,7 +181,6 @@ export const outfits: Season[] = [
     ],
   },
 
-  // ❄️ HIVER
   {
     season: "Hiver",
     themes: [

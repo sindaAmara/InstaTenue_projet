@@ -57,7 +57,7 @@ export default function SplashPage() {
       <View style={[styles.petal, styles.petal4]} />
 
       <Animated.Image
-        source={require('../assets/img/logo1.png')} // Chemin vers ton logo
+        source={require('../assets/img/logo1.png')}
         style={[styles.monogram, { opacity: fadeTitle, resizeMode: 'contain' }]}
       />
 

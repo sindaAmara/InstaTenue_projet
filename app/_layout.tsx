@@ -1,20 +1,20 @@
-import { useEffect } from 'react'
-import { Slot } from 'expo-router'
-import {
-  useFonts,
-  PlayfairDisplay_400Regular,
-  PlayfairDisplay_400Regular_Italic,
-} from '@expo-google-fonts/playfair-display'
 import {
   CormorantGaramond_300Light,
   CormorantGaramond_300Light_Italic,
   CormorantGaramond_400Regular,
 } from '@expo-google-fonts/cormorant-garamond'
+import {
+  PlayfairDisplay_400Regular,
+  PlayfairDisplay_400Regular_Italic,
+  useFonts,
+} from '@expo-google-fonts/playfair-display'
+import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
 
-import { WardrobeProvider } from '../contexts/WardrobeContext'
-import { FilterProvider }   from '../contexts/FilterContext'
 import { FavoritesProvider } from '../contexts/FavoritesContext'
+import { FilterProvider } from '../contexts/FilterContext'
+import { WardrobeProvider } from '../contexts/WardrobeContext'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -33,8 +33,6 @@ export default function RootLayout() {
 
   if (!fontsLoaded) return null
 
-  // ✅ Slot = point d'injection des pages Expo Router
-  // Les providers wrappent Slot → tous les écrans y ont accès
   return (
     <WardrobeProvider>
       <FavoritesProvider>
