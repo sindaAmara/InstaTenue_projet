@@ -1,24 +1,45 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import {
+  CormorantGaramond_300Light,
+  CormorantGaramond_300Light_Italic,
+  CormorantGaramond_400Regular,
+} from '@expo-google-fonts/cormorant-garamond'
+import {
+  PlayfairDisplay_400Regular,
+  PlayfairDisplay_400Regular_Italic,
+  useFonts,
+} from '@expo-google-fonts/playfair-display'
+import { Slot } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { FavoritesProvider } from '../contexts/FavoritesContext'
+import { FilterProvider } from '../contexts/FilterContext'
+import { WardrobeProvider } from '../contexts/WardrobeContext'
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [fontsLoaded] = useFonts({
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_400Regular_Italic,
+    CormorantGaramond_300Light,
+    CormorantGaramond_300Light_Italic,
+    CormorantGaramond_400Regular,
+  })
+
+  useEffect(() => {
+    if (fontsLoaded) SplashScreen.hideAsync()
+  }, [fontsLoaded])
+
+  if (!fontsLoaded) return null
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    <WardrobeProvider>
+      <FavoritesProvider>
+        <FilterProvider>
+          <Slot />
+        </FilterProvider>
+      </FavoritesProvider>
+    </WardrobeProvider>
+  )
 }
