@@ -1,13 +1,15 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { useRouter } from 'expo-router'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import FilterPanel from '../components/filters/FilterPanel'
+import OutfitGrid from '../components/outfit/OutfitGrid'
 import { useFilter } from '../contexts/FilterContext'
-import FilterPanel  from '../components/filters/FilterPanel'
-import OutfitGrid   from '../components/outfit/OutfitGrid'
 
 const ROSE = '#c87090'
 const DARK = '#622b4a'
 const CREAM = '#fdf0f5'
 
 export default function HomePage() {
+  const router = useRouter()
   const { filteredOutfits } = useFilter()
 
   return (
@@ -17,6 +19,9 @@ export default function HomePage() {
       <View style={styles.header}>
         <Text style={styles.pageTitle}>{'Ma\nGarde-robe'}</Text>
         <Text style={styles.tagline}>INSTA'TENUE</Text>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/')} activeOpacity={0.8}>
+          <Text style={styles.buttonText}>Retour ↩︎</Text>
+        </TouchableOpacity>
       </View>
 
       {/* FILTRES */}
@@ -85,6 +90,11 @@ const styles = StyleSheet.create({
     fontFamily: 'CormorantGaramond_300Light_Italic',
     fontSize: 16, color: '#a06080', letterSpacing: 0.5,
   },
+
+    button: { backgroundColor: '#a06080', paddingVertical: 4, paddingHorizontal: 14, borderRadius: 50, marginTop: 16, alignSelf: 'flex-start' },
+                              //'#c87090'
+    buttonText: { fontFamily: 'CormorantGaramond_400Regular', fontSize: 15, letterSpacing: 2, color: '#fdf0f5', textTransform: 'uppercase' },
+
 
   footer: {
     textAlign: 'center', paddingVertical: 32,
