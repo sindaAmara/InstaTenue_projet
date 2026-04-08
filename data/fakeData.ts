@@ -1,4 +1,5 @@
 // data/fakeData.ts
+//test
 
 type Article = {
   label: string  
@@ -169,6 +170,29 @@ export const outfits: Season[] = [
           require("../assets/img/automne/chic/tenue_2.jpeg"),
           require("../assets/img/automne/chic/tenue_3.jpeg"),
         ],
+        articles: [
+          [
+            { label: 'Haut', name: 'Chemise Bleue', price: '35 €', image: require('../assets/img/automne/chic/chemise_bleu_rayure.jpeg') },
+            { label: 'Haut', name: 'Pull bleu', price: '25 €', image: require('../assets/img/automne/chic/pull_bleu.jpeg') },
+            { label: 'Bas', name: 'Jean ', price: '39 €', image: require('../assets/img/automne/chic/jean_bleu_foncé.jpeg') },
+            { label: 'Accessoire', name: 'Ceinture', price: '12 €', image: require('../assets/img/automne/chic/ceinture_marron.jpeg') },
+            { label: 'Sac', name: 'Sac', price: '25 €', image: require('../assets/img/automne/chic/sac_marron.jpeg') },
+          ],
+          [
+            { label: 'Haut', name: 'Pull Beige', price: '39 €', image: require('../assets/img/automne/chic/pull_blanc.jpeg') },
+            { label: 'Bas', name: 'Pantalon noir', price: '59 €', image: require('../assets/img/automne/chic/pantalon_noir.jpeg') },
+            { label: 'Accessoire', name: 'Coque ', price: '5 €', image: require('../assets/img/automne/chic/coque.jpeg') },
+            { label: 'Chaussures', name: 'Baskets', price: '120 €', image: require('../assets/img/automne/chic/chaussure_blanc.jpeg') },
+            { label: 'Accessoire', name: 'Boucles doreilles', price: '25 €', image: require('../assets/img/automne/chic/boucle_oreille.jpeg') },
+          ],
+          [
+            { label: 'Haut', name: 'Chemise blanche', price: '39 €', image: require('../assets/img/automne/chic/chemise_blanc.jpeg') },
+            { label: 'Bas', name: 'Pantalon gris', price: '59 €', image: require('../assets/img/automne/chic/pantalon_gris.jpeg') },
+            { label: 'Sac', name: 'Sac ', price: '89 €', image: require('../assets/img/automne/chic/sac_rouge.jpeg') },
+            { label: 'Accessoire', name: 'Foulard', price: '13 €', image: require('../assets/img/automne/chic/foulard.jpeg') },
+            { label: 'Accessoire', name: 'Ceinture', price: '25 €', image: require('../assets/img/automne/chic/ceinture_noir.jpeg') },
+          ],
+        ],
       },
       {
         name: "Sport",
@@ -176,6 +200,30 @@ export const outfits: Season[] = [
           require("../assets/img/automne/sport/tenue_1.jpeg"),
           require("../assets/img/automne/sport/tenue_2.jpeg"),
           require("../assets/img/automne/sport/tenue_3.jpeg"),
+        ],
+        articles: [
+          [
+            { label: 'Accessoire', name: 'Casquette grise', price: '35 €', image: require('../assets/img/automne/sport/casquette_gris.jpeg') },
+            { label: 'Haut', name: 'Sweat bleu', price: '25 €', image: require('../assets/img/automne/sport/sweat_bleu.jpeg') },
+            { label: 'Haut', name: 'T-shirt blanc ', price: '9 €', image: require('../assets/img/automne/sport/t_shirt_blanc_large.jpeg') },
+            { label: 'Bas', name: 'Jean bleu', price: '35 €', image: require('../assets/img/automne/sport/jean_bleu_clair.jpeg') },
+            { label: 'Chaussures', name: 'Baskets', price: '250 €', image: require('../assets/img/automne/sport/chaussures_blanc.jpeg') },
+          ],
+          [
+            { label: 'Accessoire', name: 'Casquette noire', price: '35 €', image: require('../assets/img/automne/sport/casquette_noir.jpeg') },
+            { label: 'Haut', name: 'Sweat noir', price: '59 €', image: require('../assets/img/automne/sport/sweat_noir_nike.jpeg') },
+            { label: 'Bas', name: 'Legging noir ', price: '18 €', image: require('../assets/img/automne/sport/legging_noir.jpeg') },
+            { label: 'Chaussures', name: 'Baskets', price: '120 €', image: require('../assets/img/automne/sport/chaussure_blanc.jpeg') },
+            { label: 'Accessoire', name: 'Sac noir', price: '25 €', image: require('../assets/img/automne/sport/sac_noir.jpeg') },
+          ],
+          [
+            { label: 'Haut', name: 'Sweat gris', price: '39 €', image: require('../assets/img/automne/sport/sweat_gris.jpeg') },
+            { label: 'Haut', name: 'T shirt blanc', price: '25 €', image: require('../assets/img/automne/sport/t_shirt_blanc_large.jpeg') },
+            { label: 'Bas', name: 'Jogging noir', price: '59 €', image: require('../assets/img/automne/sport/pantalon_noir.jpeg') },
+            { label: 'Chaussures', name: 'Baskets noires ', price: '89 €', image: require('../assets/img/automne/sport/chaussures_blanc.jpeg') },
+            { label: 'Accessoire', name: 'Boucles oreilles', price: '13 €', image: require('../assets/img/automne/sport/boucle_oreille.jpeg') },
+
+          ],
         ],
       },
     ],
@@ -191,6 +239,29 @@ export const outfits: Season[] = [
           require("../assets/img/hiver/chic/tenue_2.jpeg"),
           require("../assets/img/hiver/chic/tenue_3.jpeg"),
         ],
+        articles: [
+          [
+            { label: 'Accessoire', name: 'Lunettes noires', price: '35 €', image: require('../assets/img/hiver/chic/lunette.jpeg') },
+            { label: 'Accessoire', name: 'Manteau noir', price: '250 €', image: require('../assets/img/hiver/chic/manteau_noir.jpeg') },
+            { label: 'Haut', name: 'Pull noir', price: '39 €', image: require('../assets/img/hiver/chic/pull_noir.jpeg') },
+            { label: 'Bas', name: 'Jean bleu', price: '49 €', image: require('../assets/img/hiver/chic/jean_bleu.jpeg') },
+            { label: 'Chaussures', name: 'Samba', price: '100 €', image: require('../assets/img/hiver/chic/chaussures.jpeg') },
+          ],
+          [
+            { label: 'Accessoire', name: 'Lunettes', price: '39 €', image: require('../assets/img/hiver/chic/lunette.jpeg') },
+            { label: 'Accessoire', name: 'Manteau bleu', price: '59 €', image: require('../assets/img/hiver/chic/manteau_bleu.jpeg') },
+            { label: 'Haut', name: 'Pull blanc', price: '59 €', image: require('../assets/img/hiver/chic/pull_blanc.jpeg') },
+            { label: 'Bas', name: 'Pantalon blanc', price: '50 €', image: require('../assets/img/hiver/chic/pantalon_blanc.jpeg') },
+            { label: 'Sac', name: 'Sac bleu', price: '250 €', image: require('../assets/img/hiver/chic/sac_dior.jpeg') },
+          ],
+          [
+            { label: 'Haut', name: 'Pull noir', price: '39 €', image: require('../assets/img/hiver/chic/pull_noir.jpeg') },
+            { label: 'Accessoire', name: 'Manteau', price: '59 €', image: require('../assets/img/hiver/chic/manteau_marron.jpeg') },
+            { label: 'Accessoire', name: 'Ceinture ', price: '29 €', image: require('../assets/img/hiver/chic/ceinture_noir.jpeg') },
+            { label: 'Bas', name: 'Jean', price: '50 €', image: require('../assets/img/hiver/chic/jean_bleu.jpeg') },
+            { label: 'Sac', name: 'Sac', price: '25 €', image: require('../assets/img/hiver/chic/sac_noir.jpeg') },
+          ],
+        ],
       },
       {
         name: "Sport",
@@ -199,8 +270,30 @@ export const outfits: Season[] = [
           require("../assets/img/hiver/sport/tenue_2.jpeg"),
           require("../assets/img/hiver/sport/tenue_3.jpeg"),
         ],
+        articles: [
+          [
+            { label: 'Accessoire', name: 'Boucles oreilles', price: '35 €', image: require('../assets/img/hiver/sport/creole.jpeg') },
+            { label: 'Haut', name: 'Sweat noir', price: '250 €', image: require('../assets/img/hiver/sport/sweat_noir.jpeg') },
+            { label: 'Bas', name: 'Jogging noir', price: '39 €', image: require('../assets/img/hiver/sport/jogging_noir.jpeg') },
+            { label: 'Accessoire', name: 'Chaussettes blanches', price: '49 €', image: require('../assets/img/hiver/sport/chaussette.jpeg') },
+            { label: 'Chaussures', name: 'Samba', price: '100 €', image: require('../assets/img/hiver/sport/chaussures.jpeg') },
+          ],
+          [
+            { label: 'Accessoire', name: 'Veste bleue', price: '39 €', image: require('../assets/img/hiver/sport/veste_bleu.jpeg') },
+            { label: 'Haut', name: 'Sweat bleu', price: '59 €', image: require('../assets/img/hiver/sport/sweat_bleu.jpeg') },
+            { label: 'Bas', name: 'Jean noir', price: '59 €', image: require('../assets/img/hiver/sport/jean_noir.jpeg') },
+            { label: 'Accessoire', name: 'Sac noir', price: '50 €', image: require('../assets/img/hiver/sport/sac_noir.jpeg') },
+            { label: 'Accessoire', name: 'Chaussures bleues', price: '250 €', image: require('../assets/img/hiver/sport/chaussure_bleu.jpeg') },
+          ],
+          [
+            { label: 'Haut', name: 'Bandeau blanc', price: '8 €', image: require('../assets/img/hiver/sport/bandeau.jpeg') },
+            { label: 'Haut', name: 'Veste noir', price: '59 €', image: require('../assets/img/hiver/sport/veste_noir.jpeg') },
+            { label: 'Bas', name: 'Legging noir ', price: '19 €', image: require('../assets/img/hiver/sport/legging_noir.jpeg') },
+            { label: 'Sac', name: 'Sac noir', price: '15 €', image: require('../assets/img/hiver/sport/sac_noir.jpeg') },
+            { label: 'Chaussures', name: 'Chaussures blanches', price: '100 €', image: require('../assets/img/hiver/sport/chaussures.jpeg') },
+          ],
+        ],
       },
     ],
   },
-
 ]
