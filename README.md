@@ -124,8 +124,8 @@ Les routes utilisent **Expo Router** avec paramètres d'URL :
 │  ÉTÉ                    │
 │  ┌───────────────────┐  │
 │  │ •               • │  │  ← "Haut" / "Bas" (droite)
-│  │   [Photo tenue] • │  │
-│  │ •               • │  │  ← "Accessoires" (gauche)
+│  │ •  [Photo tenue]  │  │
+│  │ •               • │  │  ← "Accessoires / Manteau(Vestes)" (gauche)
 │  └───────────────────┘  │
 │  Tenue 1                │
 │  3 articles · Bohème    │
