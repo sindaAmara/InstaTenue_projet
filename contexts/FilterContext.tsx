@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, useMemo, ReactNode } from 'react'
-import { SEASONS, STYLES } from '../data/fakeData'
+import { createContext, ReactNode, useContext, useMemo, useState } from 'react'
 import { useWardrobe } from './WardrobeContext'
 
 type FilterContextType = {
