@@ -15,7 +15,6 @@ export default function HomePage() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
-      {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.pageTitle}>{'Ma\nGarde-robe'}</Text>
         <Text style={styles.tagline}>INSTA'TENUE</Text>
@@ -24,10 +23,8 @@ export default function HomePage() {
         </TouchableOpacity>
       </View>
 
-      {/* FILTRES */}
       <FilterPanel />
 
-      {/* CONTENU */}
       {filteredOutfits.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>Aucune tenue pour cette sélection</Text>

@@ -1,7 +1,9 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
+  Animated,
   Dimensions,
+  Easing,
   Image,
   Pressable,
   ScrollView,
@@ -14,10 +16,67 @@ import { outfits } from '../data/fakeData'
 
 const { width } = Dimensions.get('window')
 const PHOTO_H = width * 1.25
-const ROSE      = '#c87090'
-const DARK      = '#3d1a2e'
-const CREAM     = '#fdf0f5'
-const MID       = '#a06080'
+const ROSE    = '#c87090'
+const DARK    = '#3d1a2e'
+const CREAM   = '#fdf0f5'
+const MID     = '#a06080'
+
+const CLOTHING_LABELS = ['haut', 'bas']
+
+const PulsingDot = ({ isActive, hasBeenTouched, onPress }: {
+  isActive: boolean
+  hasBeenTouched: boolean
+  onPress: () => void
+}) => {
+  const pulseAnim = useRef(new Animated.Value(0)).current
+  const stoppedRef = useRef(false)
+
+  const startLoop = () => {
+    stoppedRef.current = false
+    const loop = () => {
+      if (stoppedRef.current) return
+      pulseAnim.setValue(0)
+      Animated.timing(pulseAnim, {
+        toValue: 1,
+        duration: 1200,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: false,
+      }).start(({ finished }) => {
+        if (finished && !stoppedRef.current) loop()
+      })
+    }
+    loop()
+  }
+
+  const stopLoop = () => {
+    stoppedRef.current = true
+    pulseAnim.stopAnimation()
+    pulseAnim.setValue(0)
+  }
+
+  useEffect(() => {
+    if (!hasBeenTouched) startLoop()
+    else stopLoop()
+    return () => stopLoop()
+  }, [hasBeenTouched])
+
+  const scale = pulseAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 2.5] })
+  const opacity = pulseAnim.interpolate({ inputRange: [0, 0.1, 1], outputRange: [0, 0.6, 0] })
+
+  return (
+    <View style={styles.dotContainer}>
+      {!hasBeenTouched && (
+        <Animated.View style={[styles.pulseCircle, { opacity, transform: [{ scale }] }]} />
+      )}
+      <TouchableOpacity
+        style={[styles.dot, isActive && styles.dotActive]}
+        onPress={onPress}
+        activeOpacity={0.8}
+        hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+      />
+    </View>
+  )
+}
 
 export default function OutfitDetail() {
   const router = useRouter()
@@ -27,25 +86,30 @@ export default function OutfitDetail() {
   const idx = Number(outfitIndex) || 0
 
   const [activePoint, setActivePoint] = useState<number | null>(null)
+  const [touchedDots, setTouchedDots] = useState<Set<number>>(new Set())
 
   const seasonData = outfits.find(s => s.season.toLowerCase() === season?.toLowerCase())
   const themeData  = seasonData?.themes.find(t => t.name.toLowerCase() === theme?.toLowerCase())
 
-  if (!seasonData || !themeData) {
-    return <Text>Tenue non trouvée</Text>
+  if (!seasonData || !themeData) return <Text>Tenue non trouvée</Text>
+
+  const mainImage    = themeData.items[idx]
+  const articles     = themeData.articles?.[idx] ?? []
+  const similarItems = themeData.items.filter((_, i) => i !== idx)
+
+  const rightArticles  = articles.filter(a =>  CLOTHING_LABELS.includes(a.label.toLowerCase()))
+  const leftArticles   = articles.filter(a => !CLOTHING_LABELS.includes(a.label.toLowerCase()))
+  const rightPositions = rightArticles.map((_, i) => (i + 1) / (rightArticles.length + 1))
+  const leftPositions  = leftArticles.map( (_, i) => (i + 1) / (leftArticles.length  + 1))
+
+  const handlePress = (globalIdx: number) => {
+    setTouchedDots(prev => new Set(prev).add(globalIdx))
+    setActivePoint(prev => prev === globalIdx ? null : globalIdx)
   }
-
-  const mainImage  = themeData.items[idx]
-  const articles   = themeData.articles?.[idx] ?? []
-
-  const similarItems = themeData?.items.filter((_, i) => i !== idx) ?? []
-
-  const DOT_POSITIONS = articles.map((_, i) => (i + 1) / (articles.length + 1))
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
-      {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Text style={styles.back}>← Retour</Text>
@@ -54,61 +118,83 @@ export default function OutfitDetail() {
         <Text style={styles.headerSeason}>{season}</Text>
       </View>
 
-      {/* PHOTO + POINTS */}
       <View style={styles.photoWrapper}>
-
-        {/* Photo principale */}
         <Image source={mainImage} style={styles.photo} resizeMode="cover" />
 
-        {/* 5 points verticaux */}
-        {articles.map((article, i) => {
-          const isActive = activePoint === i
+        {activePoint !== null && (
+          <Pressable style={[StyleSheet.absoluteFill, { zIndex: 5 }]} onPress={() => setActivePoint(null)} />
+        )}
+
+        {rightArticles.map((article, i) => {
+          const globalIdx = articles.indexOf(article)
+          const isActive  = activePoint === globalIdx
 
           return (
-            <View key={i} style={[styles.dotRow, { top: PHOTO_H * DOT_POSITIONS[i] - 6 }]} pointerEvents="box-none">
+            <View key={`right-${i}`} style={[styles.dotRowRight, { top: PHOTO_H * rightPositions[i] - 11 }]}>
               {isActive && (
-                <View style={styles.popupRow}>
+                <View style={styles.popupRowRight}>
                   <View style={styles.popupCard}>
                     <Image source={article.image} style={styles.popupImg} resizeMode="cover" />
                     <Text style={styles.popupLabel}>{article.label.toUpperCase()}</Text>
                     <Text style={styles.popupName}>{article.name}</Text>
                     <Text style={styles.popupPrice}>{article.price}</Text>
                     {(article.brand || article.ref) && (
-                      <View style={{ marginTop: 4, borderTopWidth: 0.5, borderTopColor: '#fce8ee', paddingTop: 4 }}>
+                      <View style={styles.popupMeta}>
                         {article.brand && <Text style={styles.popupBrand}>{article.brand}</Text>}
-                        {article.ref && <Text style={styles.popupRef}>{article.ref}</Text>}
+                        {article.ref   && <Text style={styles.popupRef}>{article.ref}</Text>}
                       </View>
                     )}
                   </View>
                   <View style={styles.popupLine} />
                 </View>
               )}
-
-              <TouchableOpacity
-                style={[styles.dot, isActive && styles.dotActive]}
-                onPress={() => setActivePoint(isActive ? null : i)}
-                activeOpacity={0.7}
+              <PulsingDot
+                isActive={isActive}
+                hasBeenTouched={touchedDots.has(globalIdx)}
+                onPress={() => handlePress(globalIdx)}
               />
+            </View>
+          )
+        })}
+
+        {leftArticles.map((article, i) => {
+          const globalIdx = articles.indexOf(article)
+          const isActive  = activePoint === globalIdx
+
+          return (
+            <View key={`left-${i}`} style={[styles.dotRowLeft, { top: PHOTO_H * leftPositions[i] - 11 }]}>
+              <PulsingDot
+                isActive={isActive}
+                hasBeenTouched={touchedDots.has(globalIdx)}
+                onPress={() => handlePress(globalIdx)}
+              />
+              {isActive && (
+                <View style={styles.popupRowLeft}>
+                  <View style={styles.popupLine} />
+                  <View style={styles.popupCard}>
+                    <Image source={article.image} style={styles.popupImg} resizeMode="cover" />
+                    <Text style={styles.popupLabel}>{article.label.toUpperCase()}</Text>
+                    <Text style={styles.popupName}>{article.name}</Text>
+                    <Text style={styles.popupPrice}>{article.price}</Text>
+                    {(article.brand || article.ref) && (
+                      <View style={styles.popupMeta}>
+                        {article.brand && <Text style={styles.popupBrand}>{article.brand}</Text>}
+                        {article.ref   && <Text style={styles.popupRef}>{article.ref}</Text>}
+                      </View>
+                    )}
+                  </View>
+                </View>
+              )}
             </View>
           )
         })}
       </View>
 
-      {/* Fermer popup en cliquant ailleurs */}
-      {activePoint !== null && (
-        <Pressable
-          style={StyleSheet.absoluteFill}
-          onPress={() => setActivePoint(null)}
-        />
-      )}
-
-      {/* INFO TENUE */}
       <View style={styles.infoBlock}>
         <Text style={styles.infoTitle}>Tenue {idx + 1}</Text>
         <Text style={styles.infoSub}>{articles.length} articles · {theme} · {season}</Text>
       </View>
 
-      {/* TENUES SIMILAIRES */}
       {similarItems.length > 0 && (
         <View style={styles.similarSection}>
           <Text style={styles.similarTitle}>Tenues similaires</Text>
@@ -117,24 +203,8 @@ export default function OutfitDetail() {
             <View style={styles.similarRow}>
               {similarItems.map((img, i) => {
                 const realIdx = themeData!.items.indexOf(img)
-
-                console.log('seasonData:', seasonData)
-                console.log('themeData:', themeData)
-                console.log('articles:', articles)
-                console.log('idx:', idx)
-                console.log('mainImage:', mainImage)
-                console.log('articles:', articles)
-                articles.forEach((a, i) => console.log(`Article ${i}:`, a))
-
                 return (
-                  <TouchableOpacity
-                    key={i}
-                    onPress={() =>
-                      router.replace(
-                        `/outfitDetail?season=${season}&theme=${theme}&outfitIndex=${realIdx}`
-                      )
-                    }
-                  >
+                  <TouchableOpacity key={i} onPress={() => router.push(`/outfitDetail?season=${season}&theme=${theme}&outfitIndex=${realIdx}`)}>
                     <Image source={img} style={styles.similarThumb} resizeMode="cover" />
                   </TouchableOpacity>
                 )
@@ -151,140 +221,36 @@ export default function OutfitDetail() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: CREAM },
-
   header: { paddingTop: 56, paddingHorizontal: 24, paddingBottom: 16 },
-  back: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 13, letterSpacing: 2, color: MID,
-    textTransform: 'uppercase', marginBottom: 10,
-  },
-  headerTitle: {
-    fontFamily: 'PlayfairDisplay_400Regular_Italic',
-    fontSize: 32, color: DARK, lineHeight: 38,
-  },
-  headerSeason: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 11, letterSpacing: 4, color: ROSE,
-    textTransform: 'uppercase', marginTop: 4,
-  },
-
-  photoWrapper: {
-    marginHorizontal: 16,
-    height: PHOTO_H,
-    position: 'relative',
-  },
-  photo: {
-    width: '100%',
-    height: PHOTO_H,
-    borderRadius: 20,
-  },
-
-  dotRow: {
-    position: 'absolute',
-    right: -6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    zIndex: 20,
-  },
-  dot: {
-    width: 12, height: 12,
-    borderRadius: 6,
-    backgroundColor: DARK,
-    borderWidth: 2, borderColor: CREAM,
-  },
-  dotActive: {
-    backgroundColor: ROSE,
-    transform: [{ scale: 1.3 }],
-  },
-  dotEmpty: {
-    backgroundColor: '#c4a0b0',
-    opacity: 0.5,
-  },
-
-  popupRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'absolute',
-    right: 18,
-  },
-  popupLine: {
-    width: 36, height: 1,
-    backgroundColor: ROSE,
-  },
-  popupCard: {
-      backgroundColor: 'white',
-      borderRadius: 12,
-      borderWidth: 0.5, borderColor: '#e8c4d0',
-      padding: 8,
-      width: 125,
-      shadowColor: DARK,
-      shadowOpacity: 0.10,
-      shadowRadius: 8,
-      shadowOffset: { width: 0, height: 4 },
-      elevation: 4,
-    },
-    
-  popupImg: {
-    width: 94, height: 70,
-    borderRadius: 8, marginBottom: 6,
-    backgroundColor: '#fce8ee',
-  },
-  popupLabel: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 8, letterSpacing: 3, color: ROSE,
-    textTransform: 'uppercase', marginBottom: 2,
-  },
-  popupName: {
-    fontFamily: 'CormorantGaramond_400Regular',
-    fontSize: 12, color: DARK,
-  },
-  popupPrice: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 11, color: ROSE, marginTop: 2,
-  },
-
+  back: { fontFamily: 'CormorantGaramond_300Light', fontSize: 13, letterSpacing: 2, color: MID, textTransform: 'uppercase', marginBottom: 10 },
+  headerTitle: { fontFamily: 'PlayfairDisplay_400Regular_Italic', fontSize: 32, color: DARK, lineHeight: 38 },
+  headerSeason: { fontFamily: 'CormorantGaramond_300Light', fontSize: 11, letterSpacing: 4, color: ROSE, textTransform: 'uppercase', marginTop: 4 },
+  photoWrapper: { marginHorizontal: 16, height: PHOTO_H, position: 'relative', overflow: 'visible' },
+  photo: { width: '100%', height: PHOTO_H, borderRadius: 20 },
+  dotRowRight: { position: 'absolute', right: -11, flexDirection: 'row', alignItems: 'center', zIndex: 20, pointerEvents: 'box-none' },
+  popupRowRight: { position: 'absolute', right: 35, flexDirection: 'row', alignItems: 'center', pointerEvents: 'none' },
+  dotRowLeft: { position: 'absolute', left: -11, flexDirection: 'row', alignItems: 'center', zIndex: 20 },
+  popupRowLeft: { position: 'absolute', left: 35, flexDirection: 'row', alignItems: 'center', pointerEvents: 'none' },
+  dotContainer: { width: 22, height: 22, alignItems: 'center', justifyContent: 'center' },
+  pulseCircle: { position: 'absolute', width: 22, height: 22, borderRadius: 11, backgroundColor: ROSE },
+  dot: { width: 22, height: 22, borderRadius: 11, backgroundColor: DARK, borderWidth: 2.5, borderColor: CREAM, elevation: 6, boxShadow: '0px 2px 5px rgba(61, 26, 46, 0.30)' },
+  dotActive: { backgroundColor: ROSE, width: 24, height: 24, borderRadius: 12, borderWidth: 3 },
+  popupLine: { width: 20, height: 1.5, backgroundColor: ROSE },
+  popupCard: { backgroundColor: 'white', borderRadius: 14, borderWidth: 0.5, borderColor: '#e8c4d0', padding: 10, width: 130, elevation: 5, boxShadow: '0px 4px 10px rgba(61, 26, 46, 0.12)' },
+  popupImg: { width: 110, height: 150, borderRadius: 10, marginBottom: 7, backgroundColor: '#fce8ee' },
+  popupLabel: { fontFamily: 'CormorantGaramond_300Light', fontSize: 8, letterSpacing: 3, color: ROSE, textTransform: 'uppercase', marginBottom: 2 },
+  popupName: { fontFamily: 'CormorantGaramond_400Regular', fontSize: 13, color: DARK },
+  popupPrice: { fontFamily: 'CormorantGaramond_300Light', fontSize: 12, color: ROSE, marginTop: 3 },
+  popupMeta: { marginTop: 4, borderTopWidth: 0.5, borderTopColor: '#fce8ee', paddingTop: 4 },
+  popupBrand: { fontFamily: 'CormorantGaramond_400Regular', fontSize: 10, color: MID, textTransform: 'uppercase' },
+  popupRef: { fontFamily: 'CormorantGaramond_300Light', fontSize: 9, color: '#c4a0b0', marginTop: 1 },
   infoBlock: { paddingHorizontal: 24, paddingTop: 20, paddingBottom: 8 },
-  infoTitle: {
-    fontFamily: 'PlayfairDisplay_400Regular_Italic',
-    fontSize: 20, color: DARK,
-  },
-  infoSub: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 12, letterSpacing: 1.5, color: MID, marginTop: 4,
-  },
-
+  infoTitle: { fontFamily: 'PlayfairDisplay_400Regular_Italic', fontSize: 20, color: DARK },
+  infoSub: { fontFamily: 'CormorantGaramond_300Light', fontSize: 12, letterSpacing: 1.5, color: MID, marginTop: 4 },
   similarSection: { paddingHorizontal: 24, paddingTop: 24 },
-  similarTitle: {
-    fontFamily: 'PlayfairDisplay_400Regular_Italic',
-    fontSize: 18, color: DARK, marginBottom: 4,
-  },
-  similarSub: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 9, letterSpacing: 4, color: ROSE,
-    textTransform: 'uppercase', marginBottom: 14,
-  },
+  similarTitle: { fontFamily: 'PlayfairDisplay_400Regular_Italic', fontSize: 18, color: DARK, marginBottom: 4 },
+  similarSub: { fontFamily: 'CormorantGaramond_300Light', fontSize: 9, letterSpacing: 4, color: ROSE, textTransform: 'uppercase', marginBottom: 14 },
   similarRow: { flexDirection: 'row', gap: 10 },
-  similarThumb: {
-    width: 80, height: 110,
-    borderRadius: 12,
-    backgroundColor: '#fce8ee',
-  },
-
-popupBrand: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 10,
-    color: MID,
-    marginTop: 2,
-  },
-  popupRef: {
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 9,
-    color: '#c4a0b0',
-  },
-
-  footer: {
-    textAlign: 'center', paddingVertical: 36,
-    fontFamily: 'CormorantGaramond_300Light',
-    fontSize: 9, color: '#c4a0b0', letterSpacing: 3,
-  },
+  similarThumb: { width: 80, height: 110, borderRadius: 12, backgroundColor: '#fce8ee' },
+  footer: { textAlign: 'center', paddingVertical: 36, fontFamily: 'CormorantGaramond_300Light', fontSize: 9, color: '#c4a0b0', letterSpacing: 3 },
 })
