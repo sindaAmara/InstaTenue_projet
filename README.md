@@ -65,7 +65,7 @@ cd InstaTenue_projet
 npm install
 
 # Lancer l'application
-npx expo start
+npm run start 
 ```
 
 ---
