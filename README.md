@@ -1,12 +1,20 @@
 # InstaTenue
-
 Application mobile de garde-robe interactive, développée avec **React Native** et **Expo Router**.  
 Parcourez vos tenues par saison et thème, explorez les articles qui les composent via des points interactifs, et découvrez des tenues similaires.
 
 ---
 
-## Fonctionnalités
+## Équipe
 
+Projet créé et pensé par :
+
+- Amara Sinda
+- Poghossian Mariam
+- Roffidal Ambre
+
+---
+
+## Fonctionnalités
 - **Navigation par saison & thème** — Organisez votre garde-robe selon les saisons (Printemps, Été, Automne, Hiver) et des thèmes stylistiques
 - **Points interactifs sur les photos** — Cliquez sur les dots animés pour afficher les détails d'un article (nom, prix, marque, référence)
 - **Animations pulsées** — Les dots non encore touchés pulsent pour inviter à l'interaction
@@ -16,7 +24,6 @@ Parcourez vos tenues par saison et thème, explorez les articles qui les compose
 ---
 
 ## Structure du projet
-
 ```
 InstaTenue_projet/
 ├── app/
@@ -49,10 +56,9 @@ InstaTenue_projet/
 ---
 
 ## Installation
-
 ```bash
 # Cloner le projet
-git clone https://github.com/votre-user/InstaTenue.git
+git clone https://github.com/sindaAmara/InstaTenue_projet.git
 cd InstaTenue_projet
 
 # Installer les dépendances
@@ -65,7 +71,6 @@ npx expo start
 ---
 
 ## Dépendances principales
-
 | Package | Rôle |
 |---|---|
 | `expo` | Framework mobile |
@@ -77,7 +82,6 @@ npx expo start
 ---
 
 ## Design System
-
 | Variable | Valeur | Usage |
 |---|---|---|
 | `ROSE` | `#c87090` | Accents, prix, labels |
@@ -88,14 +92,10 @@ npx expo start
 ---
 
 ## Navigation
-
 Les routes utilisent **Expo Router** avec paramètres d'URL :
-
 ```
 /outfit/[id]?season=Automne&theme=Chic
-
 ```
-
 | Paramètre | Type | Description |
 |---|---|---|
 | `season` | `string` | Saison (ex: `"Été"`) |
@@ -104,11 +104,7 @@ Les routes utilisent **Expo Router** avec paramètres d'URL :
 
 ---
 
-
----
-
 ## Notes techniques
-
 - `useNativeDriver: false` est utilisé sur les animations — nécessaire pour Expo Go et le web (le module natif `RCTAnimation` n'est pas disponible dans ces environnements)
 - `pointerEvents` est défini dans les objets `style` (la prop directe est dépréciée dans les versions récentes de React Native)
 - `boxShadow` remplace les anciennes props `shadow*` (dépréciées sur web)
@@ -116,7 +112,6 @@ Les routes utilisent **Expo Router** avec paramètres d'URL :
 ---
 
 ## Aperçu
-
 ```
 ┌─────────────────────────┐
 │  ← Retour               │
@@ -138,5 +133,4 @@ Les routes utilisent **Expo Router** avec paramètres d'URL :
 ---
 
 ## Licence
-
 Projet personnel — INSTA'TENUE · 2026
